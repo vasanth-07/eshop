@@ -62,7 +62,7 @@ An input file containing the order details is mandatory for running the applicat
 
 
 | Element             | Data Type | Possible Values
-| ------------------- | --------- | |
+| ------------------- | --------- | ---------------|
 | Product Id    	  | String    | |
 | Product Name        | String    | |
 | Product Description | String    | |
