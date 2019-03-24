@@ -42,6 +42,10 @@ Below steps assume that you have extracted the zip file contents to `c:\Developm
 
 `c:\Development\eshop\mvn install`
 
+To generate the java docs, you can use the below command. Documentation will be generated in the `c:\Development\eshop\target\site\apidocs` directory
+
+`c:\Development\eshop\mvn javadoc:javadoc`
+
 
 Running the application
 -------------------------
