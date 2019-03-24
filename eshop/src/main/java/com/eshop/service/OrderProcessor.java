@@ -1,19 +1,64 @@
 package com.eshop.service;
 
-import java.text.SimpleDateFormat;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import com.eshop.model.Order;
 import com.eshop.model.OrderItem;
 import com.eshop.model.Product;
 import com.eshop.model.User;
+import com.eshop.util.LogFormatter;
 
+
+/**
+ * OrderProcessor Class - Receives an order, processes it item by item 
+ * and applies discount where applicable.
+ */
 public class OrderProcessor {
 	
+	
+	private Logger logger = null;
+	private Handler consoleHandler = null;
+	private Handler fileHandler = null;
+	
+	/**
+	 * Instantiates a new order processor.
+	 */
+	public OrderProcessor()
+	{
+		logger = Logger.getLogger(this.getClass().getName());
+		
+		consoleHandler = new ConsoleHandler();
+		consoleHandler.setFormatter(new LogFormatter());
+		
+		try {
+			fileHandler = new FileHandler("log/order.log");
+			fileHandler.setFormatter(new LogFormatter());
+		} catch (SecurityException e) {			
+			e.printStackTrace();
+		} catch (IOException e) {			
+			e.printStackTrace();
+		}
+		
+		logger.addHandler(consoleHandler);
+		logger.addHandler(fileHandler);
+	}
+	
+	/**
+	 * Process order.
+	 *
+	 * @param order - the order to be processed
+	 * @return the order - the processed order
+	 */
 	public Order processOrder(Order order)
 	{
 		
@@ -22,58 +67,29 @@ public class OrderProcessor {
 		
 		Order finalOrder = null;
 		
-		System.out.println("Processing order. Checking for discounts to apply...");
+		logger.log(Level.INFO,"Processing order. Checking for discounts to apply...");
 		
 		//if user is an affiliate, discount 30% from total amount
 		if(order.getUser().getUserType().equals(User.USER_TYPE.EMPLOYEE))
-		{
+		{			
 			
-			/*
-			while(orderIterator.hasNext())
-			{
-				orderItem = (OrderItem) orderIterator.next();
-				if(!orderItem.getProduct().getProductType().equals(Product.PRODUCT_TYPE.GROCERY))
-				{
-					updatedOrderItem = orderItem;
-					updatedOrderItem.setItemCost(orderItem.getItemCost()-(orderItem.getItemCost()*0.3));
-					updatedItemList.add(updatedOrderItem);
-					finalOrder.setTotalAmount(order.getTotalAmount()-(order.getTotalAmount()*0.3));
-				}
-				else
-				{
-					updatedItemList.add(orderItem);
-				}
-				
-			}
-			*/
-			System.out.println("Customer Type : "+""+order.getUser().getUserType()+", applying 30% discount on all items except GROCERY");
+			logger.log(Level.INFO,"Customer Type : "+""+order.getUser().getUserType()+", applying 30% discount on all items except GROCERY");
 			
-			finalOrder = applyPercentageDiscount(order,0.3);
-			//displayOrder(finalOrder);
-			
+			finalOrder = applyPercentageDiscount(order,0.3);	
 			
 		}
 		//if user is an affiliate, discount 10% from total amount
 		else if(order.getUser().getUserType().equals(User.USER_TYPE.AFFILIATE))
 		{
-			System.out.println("Customer Type : "+""+order.getUser().getUserType()+", applying 10% discount on all items except GROCERY");
+			logger.log(Level.INFO,"Customer Type : "+""+order.getUser().getUserType()+", applying 10% discount on all items except GROCERY");
 			finalOrder = applyPercentageDiscount(order,0.1);
 		}
 		//if user is a member for more than 2 years, discount 5% from total amount
 		else
 		{
-			System.out.println("Checking loyal customer...");
+			logger.log(Level.INFO,"Checking loyal customer...");
 			Calendar today = Calendar.getInstance();
 			today.setTime(new Date());
-			
-			
-			/*
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			
-			System.out.println("Today : "+sdf.format(new Date()));
-			
-			System.out.println("Regn Date : "+sdf.format(order.getUser().getRegistrationDate()));
-			*/
 			
 			Calendar registeredDate = Calendar.getInstance();
 			registeredDate.setTime(order.getUser().getRegistrationDate());
@@ -81,20 +97,11 @@ public class OrderProcessor {
 			int yearsDiff = today.get(Calendar.YEAR) - registeredDate.get(Calendar.YEAR);
 			int monthsDiff = today.get(Calendar.MONTH) - registeredDate.get(Calendar.MONTH);
 			
-			int totalMonthsDiff = yearsDiff*12+monthsDiff;
-			
-			
-			/*
-			System.out.println("Years : "+yearsDiff);
-			System.out.println("months : "+monthsDiff);
-			
-			
-			System.out.println("Months : "+totalMonthsDiff);
-			*/
+			int totalMonthsDiff = yearsDiff*12+monthsDiff;		
 			
 			if(totalMonthsDiff > 24)
 			{
-				System.out.println("Customer has been registered with us for : "+""+totalMonthsDiff+" months, applying 5% discount on all items except GROCERY");
+				logger.log(Level.INFO,"Customer has been registered with us for : "+""+totalMonthsDiff+" months, applying 5% discount on all items except GROCERY");
 				finalOrder = applyPercentageDiscount(order,0.05);	
 			}
 		}
@@ -103,23 +110,11 @@ public class OrderProcessor {
 		//Check if none of the criteria above were met.
 		if(finalOrder == null)
 		{
-			System.out.println("No percentage discounts apply to bill. Checking for dollar discount...");
+			logger.log(Level.INFO,"No percentage discounts apply to bill. Checking for dollar discount...");
 			finalOrder = order;
 		}
 		finalOrder = applyDollarDiscount(finalOrder,5);
-		/*
-		long numberOfHundreds = Math.round(order.getTotalAmount())/100;
 		
-		if(numberOfHundreds > 0)
-		{
-			//Check if none of the criteria above were met.
-			if(finalOrder == null)
-			{
-				finalOrder = order;
-			}
-			finalOrder.setTotalAmount(order.getTotalAmount()-(numberOfHundreds*5));
-		}
-		*/
 		
 		displayOrder(finalOrder);
 		
@@ -127,6 +122,13 @@ public class OrderProcessor {
 		
 	}
 	
+	/**
+	 * Apply percentage discount.
+	 *
+	 * @param order the order
+	 * @param discountPercentage the discount percentage
+	 * @return the order
+	 */
 	protected Order applyPercentageDiscount(Order order, double discountPercentage)
 	{
 		Order finalOrder = null;
@@ -156,25 +158,14 @@ public class OrderProcessor {
 			orderItem = (OrderItem) orderIterator.next();
 			
 			++serialNo;
-			/*
-			System.out.println("Before Discount");
 			
-			System.out.println(serialNo+". "+orderItem.getProduct().getDescription()+"\t"+orderItem.getQuantity()+"\t"+orderItem.getItemCost());
+			logger.log(Level.INFO,"Before Discount");
 			
-			System.out.println("Discount Amount : "+order.getDiscountAmount());
-			System.out.println("Final Amount : "+order.getFinalAmount());
-			*/
-			
-			System.out.println("Before Discount");
-			
-			System.out.println(serialNo+". "+orderItem.getProduct().getDescription()+"\t"+orderItem.getQuantity()+"\t"+orderItem.getItemCost());
+			logger.log(Level.INFO,serialNo+". "+orderItem.getProduct().getDescription()+"\t"+orderItem.getQuantity()+"\t"+orderItem.getItemCost());
 			
 			
 			if(!orderItem.getProduct().getProductType().equals(Product.PRODUCT_TYPE.GROCERY))
 			{
-				
-				
-				
 				updatedOrderItem = orderItem;
 				itemCost = orderItem.getItemCost();
 				
@@ -188,33 +179,17 @@ public class OrderProcessor {
 				totalDiscountAmount += discountAmount;
 				updatedFinalAmount += updatedItemCost;
 				
-				System.out.println("After Discount");
-				System.out.println(serialNo+". "+updatedOrderItem.getProduct().getDescription()+"\t"+updatedOrderItem.getQuantity()+"\t"+updatedOrderItem.getItemCost());
-				
-				/*
-				System.out.println("After Discount");
-				System.out.println(serialNo+". "+updatedOrderItem.getProduct().getDescription()+"\t"+updatedOrderItem.getQuantity()+"\t"+updatedOrderItem.getItemCost());
-				
-				System.out.println("Discount Amount : "+totalDiscountAmount);
-				System.out.println("Final Amount : "+updatedFinalAmount);
-				*/
-				
+				logger.log(Level.INFO,"After Discount");
+				logger.log(Level.INFO,serialNo+". "+updatedOrderItem.getProduct().getDescription()+"\t"+updatedOrderItem.getQuantity()+"\t"+updatedOrderItem.getItemCost());
+								
 			}
 			else
 			{
 				updatedItemList.add(orderItem);
 				updatedFinalAmount += orderItem.getItemCost();
 				
-				System.out.println("After Discount");
-				System.out.println(serialNo+". "+orderItem.getProduct().getDescription()+"\t"+orderItem.getQuantity()+"\t"+orderItem.getItemCost());
-				
-				/*
-				System.out.println("After Discount");
-				System.out.println(serialNo+". "+orderItem.getProduct().getDescription()+"\t"+orderItem.getQuantity()+"\t"+orderItem.getItemCost());
-				
-				System.out.println("Discount Amount : "+totalDiscountAmount);
-				System.out.println("Final Amount : "+updatedFinalAmount);
-				*/
+				logger.log(Level.INFO,"After Discount");
+				logger.log(Level.INFO,serialNo+". "+orderItem.getProduct().getDescription()+"\t"+orderItem.getQuantity()+"\t"+orderItem.getItemCost());
 				
 			}
 			
@@ -227,28 +202,25 @@ public class OrderProcessor {
 		finalOrder.setDiscountAmount(totalDiscountAmount);
 		finalOrder.setFinalAmount(Math.round(updatedFinalAmount*100.0)/100.0);
 		
-		System.out.println("Total discount applied after percentage discount offers :"+totalDiscountAmount);
+		logger.log(Level.INFO,"Total discount applied after percentage discount offers :"+totalDiscountAmount);
 		
-		//displayOrder(finalOrder);
 		
 		return finalOrder;
 		
 	}
 	
+	/**
+	 * Apply dollar discount.
+	 *
+	 * @param order - the order to be processed
+	 * @param discountValue the discount value
+	 * @return the order - processed order
+	 */
 	protected Order applyDollarDiscount(Order order, double discountValue)
 	{
 		long numberOfHundreds = Math.round(order.getTotalAmount())/100;
 		
 		double discountAmount = 0.0;
-		
-		/*
-		System.out.println("Before Discount");
-		
-		//System.out.println(orderItem.getProduct().getDescription()+"\t"+orderItem.getQuantity()+"\t"+orderItem.getItemCost());
-		
-		System.out.println("Discount Amount : "+order.getDiscountAmount());
-		System.out.println("Final Amount : "+order.getFinalAmount());
-		*/
 		
 		if(numberOfHundreds > 0)
 		{
@@ -256,57 +228,58 @@ public class OrderProcessor {
 			//Check if none of the criteria above were met.
 			
 			discountAmount = numberOfHundreds*discountValue;
-			System.out.println("Total order value more than $100. Dollar discount for the order value of $"+order.getTotalAmount()+" is $"+discountAmount);
+			logger.log(Level.INFO,"Total order value more than $100. Dollar discount for the order value of $"+order.getTotalAmount()+" is $"+discountAmount);
 			
 			order.setDiscountAmount(order.getDiscountAmount()+discountAmount);
 			
 			order.setFinalAmount(Math.round((order.getFinalAmount()-discountAmount)*100.0)/100.0);
-			System.out.println("Total discount applied after dollar discount offers :"+order.getDiscountAmount());
+			logger.log(Level.INFO,"Total discount applied after dollar discount offers :"+order.getDiscountAmount());
 			
 			
 		}
-		
-		/*
-		System.out.println("After Discount");
-		
-		//System.out.println(orderItem.getProduct().getDescription()+"\t"+orderItem.getQuantity()+"\t"+orderItem.getItemCost());
-		
-		System.out.println("Discount Amount : "+order.getDiscountAmount());
-		System.out.println("Final Amount : "+order.getFinalAmount());
-		*/
-		
 		
 		
 		return order;
 		
 	}
 	
+	/**
+	 * Display order.
+	 *
+	 * @param order the order
+	 */
 	private void displayOrder(Order order)
 	{
-		System.out.println("******Bill Details******");
-		System.out.println("Order Date : "+order.getUser().getLastTransactedDate());
-		System.out.println("Order Id : "+order.getOrderId());
-		System.out.println("Purchased By : "+order.getUser().getFirstName()+" "+order.getUser().getLastName());
 		
 		Iterator<OrderItem> orderIterator = order.getItemList().iterator();
 		OrderItem orderItem = null;
 		
 		int serialNo = 0;
 		
+		StringBuffer orderItemDetails = new StringBuffer();
+		
 		while(orderIterator.hasNext())
 		{
 			++serialNo;
-			orderItem = (OrderItem) orderIterator.next();
+			orderItem = (OrderItem) orderIterator.next();		
 			
-			System.out.println(serialNo+". "+orderItem.getProduct().getDescription()+"\t"+orderItem.getQuantity()+"\t"+orderItem.getItemCost());
+			orderItemDetails.append(serialNo+". "+orderItem.getProduct().getDescription()+"\t"+orderItem.getQuantity()+"\t"+orderItem.getItemCost()+"\n");
 			
 		}
 		
-		System.out.println("Purchase Amount : "+order.getTotalAmount());
-		System.out.println("Discount Amount : "+order.getDiscountAmount());
-		System.out.println("Final Amount : "+order.getFinalAmount());
-		System.out.println("******End of Bill******");
-		
+		logger.log(Level.INFO,"*******************Start of Bill*********************"+"\n"+
+				"Order Date : "+order.getUser().getLastTransactedDate()+"\n"+
+				"Order Id : "+order.getOrderId()+"\n"+
+				"Purchased By : "+order.getUser().getFirstName()+" "+order.getUser().getLastName()+"\n"+
+				"--------------------------Start of Item List----------------------------------"+"\n"+
+				orderItemDetails.toString()+"\n"+
+				"--------------------------End of Item List----------------------------------"+"\n"+
+				"Purchase Amount : "+order.getTotalAmount()+"\n"+
+				"Discount Amount : "+order.getDiscountAmount()+"\n"+
+				"Final Amount : "+order.getFinalAmount()+"\n"+
+				"*******************End of Bill*********************"
+				
+				);		
 	}
 
 }

@@ -2,23 +2,49 @@ package com.eshop.model;
 
 import java.util.Date;
 
+
+/**
+ * User Class - Defines the attributes of a user.
+ */
 public class User {
 	
+	/**
+	 * The Enum USER_TYPE.
+	 */
 	public enum USER_TYPE {
-		EMPLOYEE, AFFILIATE, NONE
+		
+			/** User is an employee. */
+			 EMPLOYEE, 
+		   /** User is an affiliate. */
+			AFFILIATE, 
+		 /** User is not an employee or affiliate */
+			NONE
 	}
 	
 	
+	/** User Id */
 	String custId;	
+	
+	/** The first name. */
 	String firstName;
+	
+	/** The last name. */
 	String lastName;
+	
+	/** The address. */
 	String address;
+	
+	/** The user type. */
 	USER_TYPE userType;
+	
+	/** The registration date. */
 	Date registrationDate;
+	
+	/** The last transacted date. */
 	Date lastTransactedDate;
 	
 	/**
-	 * 
+	 * Instantiates a new user.
 	 */
 	public User()
 	{
@@ -30,98 +56,126 @@ public class User {
 	
 	
 	/**
-	 * @return
+	 * Gets the user id.
+	 *
+	 * @return the user id
 	 */
 	public String getCustId() {
 		return custId;
 	}
 
 	/**
-	 * @param custId
+	 * Sets the user id.
+	 *
+	 * @param custId the new user id
 	 */
 	public void setCustId(String custId) {
 		this.custId = custId;
 	}
 	
 	/**
-	 * @return
+	 * Gets the first name.
+	 *
+	 * @return the first name
 	 */
 	public String getFirstName() {
 		return firstName;
 	}
 	
 	/**
-	 * @param firstName
+	 * Sets the first name.
+	 *
+	 * @param firstName the new first name
 	 */
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 	
 	/**
-	 * @return
+	 * Gets the last name.
+	 *
+	 * @return the last name
 	 */
 	public String getLastName() {
 		return lastName;
 	}
 	
 	/**
-	 * @param lastName
+	 * Sets the last name.
+	 *
+	 * @param lastName the new last name
 	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 	
 	/**
-	 * @return
+	 * Gets the address.
+	 *
+	 * @return the address
 	 */
 	public String getAddress() {
 		return address;
 	}
 	
 	/**
-	 * @param address
+	 * Sets the address.
+	 *
+	 * @param address the new address
 	 */
 	public void setAddress(String address) {
 		this.address = address;
 	}
 	
 	/**
-	 * @return
+	 * Gets the user type.
+	 *
+	 * @return the user type
 	 */
 	public USER_TYPE getUserType() {
 		return userType;
 	}
 	
 	/**
-	 * @param userType
+	 * Sets the user type.
+	 *
+	 * @param userType the new user type
 	 */
 	public void setUserType(USER_TYPE userType) {
 		this.userType = userType;
 	}
 	
 	/**
-	 * @return
+	 * Gets the registration date.
+	 *
+	 * @return the registration date
 	 */
 	public Date getRegistrationDate() {
 		return registrationDate;
 	}
 	
 	/**
-	 * @param registrationDate
+	 * Sets the registration date.
+	 *
+	 * @param registrationDate the new registration date
 	 */
 	public void setRegistrationDate(Date registrationDate) {
 		this.registrationDate = registrationDate;
 	}
 	
 	/**
-	 * @return
+	 * Gets the last transacted date.
+	 *
+	 * @return the last transacted date
 	 */
 	public Date getLastTransactedDate() {
 		return lastTransactedDate;
 	}
 	
 	/**
-	 * @param lastTransactedDate
+	 * Sets the last transacted date.
+	 *
+	 * @param lastTransactedDate the new last transacted date
 	 */
 	public void setLastTransactedDate(Date lastTransactedDate) {
 		this.lastTransactedDate = lastTransactedDate;

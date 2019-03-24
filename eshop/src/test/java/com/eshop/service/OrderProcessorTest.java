@@ -14,8 +14,15 @@ import com.eshop.model.Product;
 import com.eshop.model.User;
 import com.eshop.model.OrderItem;;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class OrderProcessorTest.
+ */
 class OrderProcessorTest {
 	
+	/**
+	 * Test employee order.
+	 */
 	@Test
 	final void testEmployeeOrder() {
 		
@@ -31,6 +38,9 @@ class OrderProcessorTest {
 		
 	}
 
+	/**
+	 * Test affiliate order.
+	 */
 	@Test
 	final void testAffiliateOrder() {
 		
@@ -46,6 +56,9 @@ class OrderProcessorTest {
 		
 	}
 	
+	/**
+	 * Test loyalist order.
+	 */
 	@Test
 	final void testLoyalistOrder() {
 		
@@ -73,6 +86,9 @@ class OrderProcessorTest {
 		
 	}
 	
+	/**
+	 * Test combo order.
+	 */
 	@Test
 	final void testComboOrder() {
 		
@@ -100,6 +116,11 @@ class OrderProcessorTest {
 		
 	}
 	
+	/**
+	 * Creates the order.
+	 *
+	 * @return the order
+	 */
 	private Order createOrder()
 	{
 		Order order = null;
