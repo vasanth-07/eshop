@@ -54,7 +54,9 @@ User type (Possible values : EMPLOYEE, AFFILIATE, LOYALIST)
 
 Please note the following when running the eshop application
 
-Two parameters `order file` and `user type` are required mandatorily to run the application. If they are not passed, the application will use the `input\order.csv` by default for processing.
+Two parameters `order file` and `user type` are required minimally to run the application. If they are not passed, the application will use the `input\order.csv` by default for processing.
+
+To verify the scenario of a user who is both LOYALIST (registered for more than 2 years) and either an EMPLOYEE or AFFILIATE, the 3rd parameter can be used. 
 
 Creating your own Order file
 ----------------------------
