@@ -61,27 +61,19 @@ Creating your own Order file
 An input file containing the order details is mandatory for running the application. A sample file `input\order.csv` is provided as part of the source code. Format of the file is as below. You can use the format to create your own file. Each line represents an order item. There are 6 data elements in an order item and each value is comma separated.
 
 
-| Element             | Data Type |
-| ------------------- | --------- |
-| Product Id    	  | String    |
-| Product Name        | String    |
-| Product Description | String    |
-| Product Type		  | String    |
-| Unit Price		  | double    |
-| Quantity 			  | int       |
+| Element             | Data Type | Possible Values
+| ------------------- | --------- | |
+| Product Id    	  | String    | |
+| Product Name        | String    | |
+| Product Description | String    | |
+| Product Type		  | String    | GROCERY, ELECTRONICS, MEDICAL |
+| Unit Price		  | double    | |
+| Quantity 			  | int       | |
 
 
-| Command | Description |
-| --- | --- |
-| `git status` | List all *new or modified* files |
-| `git diff` | Show file differences that **haven't been** staged |
+**Example entry**
 
-
-
-
-Product Id, Product Name, Product Description, Product Type, Unit Price, Quantity
-
-p1,Milk Powder,InfaGrow Milk Powder,GROCERY,80.30,2
+*p1,Milk Powder,InfaGrow Milk Powder,GROCERY,80.30,2*
 
 
 
