@@ -1,0 +1,9 @@
+<map id="eshop_map" name="eshop_map">
+<area shape="rect" id="id1" href="java:com.eshop.util.LogFormatter" title="java:com.eshop.util.LogFormatter" alt="" coords="105,566,289,627"/>
+<area shape="rect" id="id2" href="java:com.eshop.controller.OrderController" title="java:com.eshop.controller.OrderController" alt="" coords="423,118,683,249"/>
+<area shape="rect" id="id3" href="java:com.eshop.model.OrderItem" title="java:com.eshop.model.OrderItem" alt="" coords="768,851,957,1037"/>
+<area shape="rect" id="id4" href="java:com.eshop.service.OrderProcessor" title="java:com.eshop.service.OrderProcessor" alt="" coords="6,104,388,263"/>
+<area shape="rect" id="id5" href="java:com.eshop.model.Product" title="java:com.eshop.model.Product" alt="" coords="724,1098,1001,1367"/>
+<area shape="rect" id="id6" href="java:com.eshop.model.Order" title="java:com.eshop.model.Order" alt="" coords="731,421,995,773"/>
+<area shape="rect" id="id7" href="java:com.eshop.model.User" title="java:com.eshop.model.User" alt="" coords="718,8,1007,360"/>
+</map>

@@ -1,0 +1,115 @@
+@startuml
+
+class User [[java:com.eshop.model.User]] {
+	~String custId
+	~String firstName
+	~String lastName
+	~String address
+	~USER_TYPE userType
+	~Date registrationDate
+	~Date lastTransactedDate
+	+User()
+	+String getCustId()
+	+void setCustId(String custId)
+	+String getFirstName()
+	+void setFirstName(String firstName)
+	+String getLastName()
+	+void setLastName(String lastName)
+	+String getAddress()
+	+void setAddress(String address)
+	+USER_TYPE getUserType()
+	+void setUserType(USER_TYPE userType)
+	+Date getRegistrationDate()
+	+void setRegistrationDate(Date registrationDate)
+	+Date getLastTransactedDate()
+	+void setLastTransactedDate(Date lastTransactedDate)
+}
+
+class Product [[java:com.eshop.model.Product]] {
+	~String productId
+	~String name
+	~String description
+	~double unitPrice
+	~PRODUCT_TYPE productType
+	+Product()
+	+String getProductId()
+	+void setProductId(String productId)
+	+String getName()
+	+void setName(String name)
+	+String getDescription()
+	+void setDescription(String description)
+	+double getUnitPrice()
+	+void setUnitPrice(double unitPrice)
+	+PRODUCT_TYPE getProductType()
+	+void setProductType(PRODUCT_TYPE productType)
+}
+
+class OrderItem [[java:com.eshop.model.OrderItem]] {
+	~Product product
+	~int quantity
+	~double itemCost
+	+OrderItem()
+	+Product getProduct()
+	+void setProduct(Product product)
+	+int getQuantity()
+	+void setQuantity(int quantity)
+	+double getItemCost()
+	+void setItemCost(double itemCost)
+}
+
+class Order [[java:com.eshop.model.Order]] {
+	~String orderId
+	~Date orderDate
+	~User user
+	~List<OrderItem> itemList
+	~double totalAmount
+	~double discountAmount
+	~double finalAmount
+	+Order()
+	+String getOrderId()
+	+void setOrderId(String orderId)
+	+Date getOrderDate()
+	+void setOrderDate(Date orderDate)
+	+User getUser()
+	+void setUser(User user)
+	+List<OrderItem> getItemList()
+	+void setItemList(List<OrderItem> itemList)
+	+double getTotalAmount()
+	+void setTotalAmount(double totalAmount)
+	+double getDiscountAmount()
+	+void setDiscountAmount(double discountAmount)
+	+double getFinalAmount()
+	+void setFinalAmount(double finalAmount)
+}
+
+class OrderProcessor [[java:com.eshop.service.OrderProcessor]] {
+	-Logger logger
+	-Handler consoleHandler
+	-Handler fileHandler
+	+OrderProcessor()
+	+Order processOrder(Order order)
+	#Order applyPercentageDiscount(Order order, double discountPercentage)
+	#Order applyDollarDiscount(Order order, double discountValue)
+	-void displayOrder(Order order)
+}
+
+class OrderController [[java:com.eshop.controller.OrderController]] {
+	-Logger logger
+	-Handler consoleHandler
+	-Handler fileHandler
+	+OrderController()
+	+{static}void main(String[] a)
+	-Order createOrder(String orderFile, Order order)
+}
+
+class LogFormatter [[java:com.eshop.util.LogFormatter]] {
+	+String format(LogRecord record)
+}
+
+
+OrderItem o--Product
+Order "1" *-- "many" OrderItem : contains
+
+User o-- Order
+
+@enduml
