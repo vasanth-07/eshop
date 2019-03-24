@@ -1,7 +1,10 @@
-# junit5-jupiter-starter-maven
+# eshop Application
 
-The `junit5-jupiter-starter-maven` project demonstrates how to execute JUnit Jupiter
-tests using Maven.
+The `eshop` project receives the order details of a bill, applies the relevant 
+discounts and presents the final bill for payment.
 
-Please note that this project uses the [Maven Wrapper](https://github.com/takari/maven-wrapper).
-Thus, to ensure that the correct version of Maven is used, invoke `mvnw` instead of `mvn`.
+Please note the below pre-requisites for downloading and running the application.
+
+JDK 1.8 or above
+Maven 3.1.0 or above
+Junit 5.4.1 or above
