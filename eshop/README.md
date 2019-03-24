@@ -75,5 +75,8 @@ An input file containing the order details is mandatory for running the applicat
 
 *p1,Milk Powder,InfaGrow Milk Powder,GROCERY,80.30,2*
 
+UML Diagram
+-----------
 
+![Class Diagram](uml/eshop.png)
 
