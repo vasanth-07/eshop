@@ -1,7 +1,7 @@
 # eshop Application
 
-The `eshop` application receives the order details of a bill, applies the relevant 
-discounts and presents the final bill for payment.
+The `eshop` application processes the order details of a bill, applies the relevant 
+discounts and generates the final bill due for payment.
 
 Pre-requisites
 --------------
@@ -21,10 +21,10 @@ Compiling the application
 -------------------------
 
 Please ensure `JAVA_HOME` is correctly pointing to the JDK installation directory
-(In Windows, you can use `set JAVA_HOME=<JDK_DIR>`. In Unix, you can use `export JAVA_HOME=<JDK_DIR>`.)
+(In Windows, you can use `set JAVA_HOME=_jdk_install_dir_`. In Unix, you can use `export JAVA_HOME=<jdk_install_dir>`.)
 
 Please ensure `MAVEN_HOME` is correctly pointing to the Maven installation directory
-(In Windows, you can use `set MAVEN_HOME=<MAVEN_DIR>`. In Unix, you can use `export MAVEN_HOME=<MAVEN_DIR>`.)
+(In Windows, you can use `set MAVEN_HOME=<maven_install_dir>`. In Unix, you can use `export MAVEN_HOME=<maven_install_dir>`.)
 
 Run the following commands from the directory where the zip file downloaded from Github was extracted. 
 
@@ -50,7 +50,7 @@ User type (Possible values : EMPLOYEE, AFFILIATE, LOYALIST)
 
 Please note the following when running the eshop application
 
-Minimally, the `order file` and one `user type` parameters are required to run the application. If they are not passed, the application by default will use the `input\order.csv` file for processing.
+Two parameters `order file` and `user type` are required mandatorily to run the application. If they are not passed, the application will use the `input\order.csv` by default for processing.
 
 
 
