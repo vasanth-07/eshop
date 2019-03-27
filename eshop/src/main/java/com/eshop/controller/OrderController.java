@@ -37,9 +37,10 @@ public class OrderController {
 	/**
 	 * Instantiates a new order processor.
 	 */
+	
 	public OrderController()
 	{
-		logger = Logger.getLogger(this.getClass().getName());
+		logger = Logger.getLogger(this.getClass().getName());		
 		
 		consoleHandler = new ConsoleHandler();
 		consoleHandler.setFormatter(new LogFormatter());
@@ -55,18 +56,12 @@ public class OrderController {
 		
 		logger.addHandler(consoleHandler);
 		logger.addHandler(fileHandler);
+		
 	}
 	
-	/**
-	 * The main method.
-	 *
-	 * @param a[0] - File name containing the order details
-	 * @param a[1] - User type (Possible values : EMPLOYEE, AFFILIATE, LOYALIST)
-	 * @param a[2] - Optional field. To be used for verifying multiple user type combinations. (Possible values : EMPLOYEE, AFFILIATE, LOYALIST)
-	 */
-	public static void main(String a[])
+	public Order generateOrder(String paramList[])
 	{
-		OrderController controller = new OrderController();
+		
 		Order order = null;
 		
 		order = new Order();		
@@ -82,19 +77,19 @@ public class OrderController {
 		
 		
 		
-		if(a.length < 2)
+		if(paramList.length < 2)
 		{
 			System.out.println("Mandatory input parameters missing. Usage: java -jar eshop.jar <order file name> <user type> <user type>");
 			System.out.println("User type (Possible values : EMPLOYEE, AFFILIATE, LOYALIST)");
 			user.setUserType(User.USER_TYPE.EMPLOYEE);
 			user.setRegistrationDate(new Date());
 			order.setUser(user);			
-			order = controller.createOrder("input/order.csv",order);
+			order = this.createOrder("input/order.csv",order);
 		}
-		else if(a.length > 2)
+		else if(paramList.length > 2)
 		{
 			
-			if(a[1].equals("LOYALIST") || a[2].equals("LOYALIST"))
+			if(paramList[1].equals("LOYALIST") || paramList[2].equals("LOYALIST"))
 			{
 				String regDate = "2017-01-16";
 				Date registrationDate = null;
@@ -112,12 +107,12 @@ public class OrderController {
 				user.setRegistrationDate(new Date());
 			}
 			
-			if(a[1].equals("EMPLOYEE") || a[2].equals("EMPLOYEE"))
+			if(paramList[1].equals("EMPLOYEE") || paramList[2].equals("EMPLOYEE"))
 			{
 				user.setUserType(User.USER_TYPE.EMPLOYEE);
 				
 			}
-			else if(a[1].equals("AFFILIATE") || a[2].equals("AFFILIATE"))
+			else if(paramList[1].equals("AFFILIATE") || paramList[2].equals("AFFILIATE"))
 			{
 				user.setUserType(User.USER_TYPE.AFFILIATE);
 				
@@ -129,25 +124,25 @@ public class OrderController {
 			
 			order.setUser(user);
 			System.out.println(""+user.getUserType());
-			order = controller.createOrder(a[0],order);
+			order = this.createOrder(paramList[0],order);
 			
 			
 		}			
-		else if(a.length == 2)
+		else if(paramList.length == 2)
 		{
-			if(a[1].equals("EMPLOYEE"))
+			if(paramList[1].equals("EMPLOYEE"))
 			{
 				user.setUserType(User.USER_TYPE.EMPLOYEE);
 				user.setRegistrationDate(new Date());
 				
 			}
-			else if(a[1].equals("AFFILIATE"))
+			else if(paramList[1].equals("AFFILIATE"))
 			{
 				user.setUserType(User.USER_TYPE.AFFILIATE);
 				user.setRegistrationDate(new Date());
 				
 			}
-			else if(a[1].equals("LOYALIST"))
+			else if(paramList[1].equals("LOYALIST"))
 			{
 				
 				String regDate = "2017-01-16";
@@ -172,13 +167,29 @@ public class OrderController {
 			
 			order.setUser(user);
 			System.out.println(""+user.getUserType());
-			order = controller.createOrder(a[0],order);
+			order = this.createOrder(paramList[0],order);
 		}
 		
 		OrderProcessor orderProcessor = new OrderProcessor();
-		orderProcessor.processOrder(order);
+		Order processedOrder = orderProcessor.processOrder(order);
+		return processedOrder;
+	}
+	
+	/**
+	 * The main method.
+	 *
+	 * @param a[0] - File name containing the order details
+	 * @param a[1] - User type (Possible values : EMPLOYEE, AFFILIATE, LOYALIST)
+	 * @param a[2] - Optional field. To be used for verifying multiple user type combinations. (Possible values : EMPLOYEE, AFFILIATE, LOYALIST)
+	 */
+	public static void main(String paramList[])
+	{
+		OrderController controller = new OrderController();
+		controller.generateOrder(paramList);
 		
 	}
+	
+	
 	
 	/**
 	 * Creates the order.
